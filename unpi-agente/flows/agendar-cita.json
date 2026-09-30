@@ -1,0 +1,508 @@
+{
+  "version": "6.3",
+  "data_api_version": "3.0",
+  "routing_model": {
+    "CATEGORIA": [
+      "SERVICIO"
+    ],
+    "SERVICIO": [
+      "FECHA"
+    ],
+    "FECHA": [
+      "HORA"
+    ],
+    "HORA": [
+      "DATOS"
+    ],
+    "DATOS": [
+      "CONFIRMACION"
+    ],
+    "CONFIRMACION": []
+  },
+  "screens": [
+    {
+      "id": "CATEGORIA",
+      "title": "Agendar cita",
+      "data": {
+        "categorias": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "consultas",
+              "title": "Consultas y certificados",
+              "description": "Pediatría, neonatología y certificados"
+            },
+            {
+              "id": "vacunacion-pediatrica",
+              "title": "Vacunación pediátrica (niños)",
+              "description": "Esquema de vacunas para niños"
+            },
+            {
+              "id": "vacunacion-adultos",
+              "title": "Vacunación adultos",
+              "description": "Vacunas para adultos"
+            }
+          ]
+        },
+        "telefono": {
+          "type": "string",
+          "__example__": "3213524712"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "¿Qué necesitas?"
+          },
+          {
+            "type": "RadioButtonsGroup",
+            "name": "categoria",
+            "label": "Categoría de servicio",
+            "required": true,
+            "data-source": "${data.categorias}"
+          },
+          {
+            "type": "Footer",
+            "label": "Continuar",
+            "on-click-action": {
+              "name": "data_exchange",
+              "payload": {
+                "categoria": "${form.categoria}",
+                "telefono": "${data.telefono}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "SERVICIO",
+      "title": "Agendar cita",
+      "data": {
+        "servicios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "consulta-neonatal",
+              "title": "Consulta neonatal",
+              "description": "Valor: $200.000 · 30 min"
+            },
+            {
+              "id": "consulta-pediatrica",
+              "title": "Consulta pediátrica",
+              "description": "Valor: $190.000 · 30 min"
+            }
+          ]
+        },
+        "categoria": {
+          "type": "string",
+          "__example__": "consultas"
+        },
+        "categoria_nombre": {
+          "type": "string",
+          "__example__": "Consultas y certificados"
+        },
+        "telefono": {
+          "type": "string",
+          "__example__": "3213524712"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "Elige el servicio"
+          },
+          {
+            "type": "TextSubheading",
+            "text": "${data.categoria_nombre}"
+          },
+          {
+            "type": "RadioButtonsGroup",
+            "name": "servicio",
+            "label": "Servicio",
+            "required": true,
+            "data-source": "${data.servicios}"
+          },
+          {
+            "type": "Footer",
+            "label": "Continuar",
+            "on-click-action": {
+              "name": "data_exchange",
+              "payload": {
+                "categoria": "${data.categoria}",
+                "servicio": "${form.servicio}",
+                "telefono": "${data.telefono}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "FECHA",
+      "title": "Agendar cita",
+      "data": {
+        "fechas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "2026-10-01",
+              "title": "Jueves 1 de octubre",
+              "description": "Mañana"
+            },
+            {
+              "id": "2026-10-02",
+              "title": "Viernes 2 de octubre",
+              "description": ""
+            }
+          ]
+        },
+        "servicio": {
+          "type": "string",
+          "__example__": "consulta-pediatrica"
+        },
+        "servicio_resumen": {
+          "type": "string",
+          "__example__": "Consulta pediátrica · $190.000"
+        },
+        "telefono": {
+          "type": "string",
+          "__example__": "3213524712"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "¿Qué día te queda bien?"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.servicio_resumen}"
+          },
+          {
+            "type": "RadioButtonsGroup",
+            "name": "fecha",
+            "label": "Día de la cita",
+            "required": true,
+            "data-source": "${data.fechas}"
+          },
+          {
+            "type": "Footer",
+            "label": "Continuar",
+            "on-click-action": {
+              "name": "data_exchange",
+              "payload": {
+                "servicio": "${data.servicio}",
+                "fecha": "${form.fecha}",
+                "telefono": "${data.telefono}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "HORA",
+      "title": "Agendar cita",
+      "data": {
+        "horas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "08:00",
+              "title": "8:00 am"
+            },
+            {
+              "id": "08:30",
+              "title": "8:30 am"
+            }
+          ]
+        },
+        "servicio": {
+          "type": "string",
+          "__example__": "consulta-pediatrica"
+        },
+        "fecha": {
+          "type": "string",
+          "__example__": "2026-10-01"
+        },
+        "fecha_texto": {
+          "type": "string",
+          "__example__": "Jueves 1 de octubre de 2026"
+        },
+        "telefono": {
+          "type": "string",
+          "__example__": "3213524712"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "Elige la hora"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.fecha_texto}"
+          },
+          {
+            "type": "Dropdown",
+            "name": "hora",
+            "label": "Hora de la cita",
+            "required": true,
+            "data-source": "${data.horas}"
+          },
+          {
+            "type": "Footer",
+            "label": "Continuar",
+            "on-click-action": {
+              "name": "data_exchange",
+              "payload": {
+                "servicio": "${data.servicio}",
+                "fecha": "${data.fecha}",
+                "hora": "${form.hora}",
+                "telefono": "${data.telefono}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "DATOS",
+      "title": "Agendar cita",
+      "data": {
+        "servicio": {
+          "type": "string",
+          "__example__": "consulta-pediatrica"
+        },
+        "fecha": {
+          "type": "string",
+          "__example__": "2026-10-01"
+        },
+        "hora": {
+          "type": "string",
+          "__example__": "08:00"
+        },
+        "telefono": {
+          "type": "string",
+          "__example__": "3213524712"
+        },
+        "nombre": {
+          "type": "string",
+          "__example__": "María Pérez"
+        },
+        "resumen_cita": {
+          "type": "string",
+          "__example__": "Jueves 1 de octubre de 2026 · 8:00 am"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "Datos del paciente"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.resumen_cita}"
+          },
+          {
+            "type": "TextInput",
+            "name": "nombre",
+            "label": "Nombre completo",
+            "input-type": "text",
+            "required": true,
+            "min-chars": "5",
+            "max-chars": "80",
+            "helper-text": "Nombre y apellido del paciente",
+            "init-value": "${data.nombre}"
+          },
+          {
+            "type": "TextInput",
+            "name": "telefono",
+            "label": "Teléfono",
+            "input-type": "phone",
+            "required": true,
+            "helper-text": "Puedes cambiarlo si agendas para otra persona",
+            "init-value": "${data.telefono}"
+          },
+          {
+            "type": "Footer",
+            "label": "Continuar",
+            "on-click-action": {
+              "name": "data_exchange",
+              "payload": {
+                "servicio": "${data.servicio}",
+                "fecha": "${data.fecha}",
+                "hora": "${data.hora}",
+                "nombre": "${form.nombre}",
+                "telefono": "${form.telefono}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "CONFIRMACION",
+      "title": "Confirmar cita",
+      "terminal": true,
+      "success": true,
+      "data": {
+        "servicio": {
+          "type": "string",
+          "__example__": "consulta-pediatrica"
+        },
+        "fecha": {
+          "type": "string",
+          "__example__": "2026-10-01"
+        },
+        "hora": {
+          "type": "string",
+          "__example__": "08:00"
+        },
+        "nombre": {
+          "type": "string",
+          "__example__": "María Pérez"
+        },
+        "telefono": {
+          "type": "string",
+          "__example__": "3213524712"
+        },
+        "linea_servicio": {
+          "type": "string",
+          "__example__": "💉 Servicio: Consulta pediátrica"
+        },
+        "linea_valor": {
+          "type": "string",
+          "__example__": "💰 Valor: $190.000"
+        },
+        "linea_fecha": {
+          "type": "string",
+          "__example__": "📅 Fecha: Jueves 1 de octubre de 2026"
+        },
+        "linea_hora": {
+          "type": "string",
+          "__example__": "🕐 Hora: 8:00 am"
+        },
+        "linea_paciente": {
+          "type": "string",
+          "__example__": "👤 Paciente: María Pérez"
+        },
+        "linea_telefono": {
+          "type": "string",
+          "__example__": "📞 Teléfono: 3213524712"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "Confirma tu cita"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.linea_servicio}"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.linea_valor}"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.linea_fecha}"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.linea_hora}"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.linea_paciente}"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.linea_telefono}"
+          },
+          {
+            "type": "Footer",
+            "label": "Confirmar cita",
+            "on-click-action": {
+              "name": "complete",
+              "payload": {
+                "servicio": "${data.servicio}",
+                "fecha": "${data.fecha}",
+                "hora": "${data.hora}",
+                "nombre": "${data.nombre}",
+                "telefono": "${data.telefono}"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
